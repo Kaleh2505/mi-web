@@ -17,11 +17,12 @@
         }
         .container {
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
+            align-items: center;
             gap: 20px;
             padding: 20px;
             width: 100%;
-            max-width: 800px; 
+            max-width: 500px;
         }
         .calendar, .history {
             background: white;
@@ -29,7 +30,7 @@
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            position: relative; /* Para posicionar el botón */
+            width: 100%;
         }
         .selected-dates, .highlighted {
             margin-top: 10px;
@@ -53,14 +54,14 @@
         .reserve-btn {
             background-color: #00aaff;
             color: white;
-            font-size: 18px;
-            padding: 10px 20px;
+            font-size: 22px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            position: absolute;
-            right: 20px;
-            top: 20px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
         }
         .reserve-btn:hover {
             background-color: #0088cc;
@@ -84,8 +85,6 @@
                 font-size: 14px;
             }
             .reserve-btn {
-                position: static;
-                margin-top: 10px;
                 width: 100%;
             }
         }
@@ -101,10 +100,10 @@
         <div class="calendar">
             <h2>Select a Date Range</h2>
             <div id="inline-calendar"></div>
-            <button class="reserve-btn" onclick="saveDates()">RESERVE</button>
             <div class="selected-dates" id="selected-dates"></div>
             <div class="selected-dates" id="days-count"></div>
         </div>
+        <button class="reserve-btn" onclick="saveDates()">RESERVE</button>
         <div class="history">
             <h2>Selection History</h2>
             <table>
