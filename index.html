@@ -121,6 +121,7 @@
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Reservation Date & Time</th>
+                        <th>Days Reserved</th> <!-- Nueva columna para los días -->
                     </tr>
                 </thead>
                 <tbody id="history-table"></tbody>
@@ -156,14 +157,19 @@
 
         function saveDates() {
             if (selectedRange.length === 2) {
-                const start = formatDateLocal(selectedRange[0]); // Corrección de la fecha
+                const start = formatDateLocal(selectedRange[0]);
                 const end = formatDateLocal(selectedRange[1]);
 
+                // Calculamos los días de la reserva
+                const diffTime = Math.abs(selectedRange[1] - selectedRange[0]);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                // Enviamos los datos a la hoja de cálculo, incluyendo los días
                 fetch(sheetUrl, {
                     method: "POST",
                     mode: "no-cors",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ start, end })
+                    body: JSON.stringify({ start, end, days: diffDays })  // Enviamos el número de días
                 }).then(() => {
                     loadHistory();
                     alert("Your reservation has been recorded");
@@ -196,6 +202,7 @@
                             <td>${entry.start}</td>
                             <td>${entry.end}</td>
                             <td>${entry.timestamp}</td>
+                            <td>${entry.days}</td> <!-- Añadimos el número de días -->
                         `;
                         tableBody.appendChild(row);
                     });
