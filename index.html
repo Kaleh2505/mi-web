@@ -191,26 +191,28 @@
                 `Number of days selected: ${diffDays}`;
         }
 
-        function loadHistory() {
-            fetch(sheetUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.getElementById("history-table");
-                    tableBody.innerHTML = "";
-                    data.forEach(entry => {
-                        const row = document.createElement("tr");
-                        row.innerHTML = `
-                            <td>${entry.start}</td>
-                            <td>${entry.end}</td>
-                            <td>${entry.timestamp}</td>
-                            <td>${entry.days}</td> <!-- Añadimos el número de días -->
-                            <td>${entry.additionalData}</td> <!-- Nueva columna -->
-                        `;
-                        tableBody.appendChild(row);
-                    });
-                })
-                .catch(err => console.error("Error loading history:", err));
-        }
+   function loadHistory() {
+    fetch(sheetUrl)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById("history-table");
+            tableBody.innerHTML = "";
+            data.forEach(entry => {
+                // Asegúrate de que el valor de diffDays esté presente
+                console.log(entry); // Verifica si "entry.diffDays" tiene el valor esperado
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${entry.start}</td>
+                    <td>${entry.end}</td>
+                    <td>${entry.timestamp}</td>
+                    <td>${entry.diffDays}</td> <!-- Asegúrate de que diffDays esté aquí -->
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(err => console.error("Error loading history:", err));
+}
 
         function notifyHost() {
             // Enviar el mensaje por WhatsApp
