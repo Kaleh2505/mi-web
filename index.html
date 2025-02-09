@@ -65,23 +65,6 @@
         .reserve-btn:hover {
             background-color: #0088cc;
         }
-        /* Botón Notificar al Host */
-        .notify-btn {
-            background-color: #25d366;
-            color: white;
-            font-size: 18px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            max-width: 300px;
-            margin-top: 15px;
-            display: none;
-        }
-        .notify-btn:hover {
-            background-color: #128c7e;
-        }
         /* Responsivo */
         @media only screen and (max-width: 768px) {
             .container {
@@ -96,7 +79,7 @@
             .selected-dates {
                 font-size: 14px;
             }
-            .reserve-btn, .notify-btn {
+            .reserve-btn {
                 font-size: 16px;
                 padding: 10px;
             }
@@ -111,7 +94,6 @@
             <button class="reserve-btn" onclick="saveDates()">RESERVE</button>
             <div class="selected-dates" id="selected-dates"></div>
             <div class="selected-dates" id="days-count"></div>
-            <button class="notify-btn" id="notifyHost" onclick="notifyHost()">Notificar al Host</button>
         </div>
         <div class="history">
             <h2>Selection History</h2>
@@ -121,6 +103,7 @@
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Reservation Date & Time</th>
+                        <th>Number of Days</th> <!-- Nueva columna -->
                     </tr>
                 </thead>
                 <tbody id="history-table"></tbody>
@@ -156,18 +139,21 @@
 
         function saveDates() {
             if (selectedRange.length === 2) {
-                const start = formatDateLocal(selectedRange[0]); // Corrección de la fecha
+                const start = formatDateLocal(selectedRange[0]);
                 const end = formatDateLocal(selectedRange[1]);
+                
+                // Calcular el número de días
+                const diffTime = Math.abs(selectedRange[1] - selectedRange[0]);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
                 fetch(sheetUrl, {
                     method: "POST",
                     mode: "no-cors",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ start, end })
+                    body: JSON.stringify({ start, end, diffDays }) // Enviar también el número de días
                 }).then(() => {
                     loadHistory();
                     alert("Your reservation has been recorded");
-                    document.getElementById('notifyHost').style.display = 'inline-block'; // Muestra el botón
                 }).catch(err => console.error("Error saving dates:", err));
             } else {
                 alert("Select a date range");
@@ -196,19 +182,12 @@
                             <td>${entry.start}</td>
                             <td>${entry.end}</td>
                             <td>${entry.timestamp}</td>
+                            <td>${entry.diffDays}</td> <!-- Mostrar el número de días -->
                         `;
                         tableBody.appendChild(row);
                     });
                 })
                 .catch(err => console.error("Error loading history:", err));
-        }
-
-        function notifyHost() {
-            // Enviar el mensaje por WhatsApp
-            const mensaje = "¡Hola! He realizado una reserva.";
-            const numero = "51946184655"; // Número de teléfono en formato internacional
-            const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
-            window.open(url, "_blank"); // Esto abre WhatsApp en una nueva pestaña
         }
     </script>
 </body>
