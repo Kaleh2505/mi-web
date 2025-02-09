@@ -13,33 +13,28 @@
             align-items: center;
             height: 100vh;
             background-color: #f4f4f4;
+            margin: 0;
         }
         .container {
             display: flex;
+            flex-direction: column; /* Cambiado para que los elementos se apilen en pantallas pequeñas */
             gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
         }
-        .calendar {
+        .calendar, .history {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-        .selected-dates {
+        .selected-dates, .highlighted {
             margin-top: 10px;
             font-weight: bold;
         }
-        .highlighted {
-            background-color: yellow;
-            padding: 3px;
-            border-radius: 5px;
-        }
         .history {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
             max-height: 300px;
             overflow-y: auto;
         }
@@ -52,25 +47,50 @@
             padding: 8px;
             text-align: center;
         }
+
+        /* Estilo responsivo */
+        @media only screen and (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .calendar, .history {
+                width: 100%;
+            }
+            table {
+                font-size: 12px;
+            }
+            th, td {
+                padding: 5px;
+            }
+            .selected-dates {
+                font-size: 14px;
+            }
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="calendar">
-            <h2>Select a Date Range</h2> <!-- Título del calendario -->
+            <h2>Select a Date Range</h2>
             <div id="inline-calendar"></div>
-            <button onclick="saveDates()">Save</button> <!-- Botón de guardar -->
+            <button onclick="saveDates()">Save</button>
             <div class="selected-dates" id="selected-dates"></div>
             <div class="selected-dates" id="days-count"></div>
         </div>
         <div class="history">
-            <h2>Selection History</h2> <!-- Título del historial -->
+            <h2>Selection History</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>Start Date</th> <!-- Encabezado de columna para la fecha de inicio -->
-                        <th>End Date</th> <!-- Encabezado de columna para la fecha de fin -->
-                        <th>Reservation Date & Time</th> <!-- Nueva columna para la fecha y hora de reserva -->
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reservation Date & Time</th>
                     </tr>
                 </thead>
                 <tbody id="history-table"></tbody>
@@ -110,10 +130,10 @@
                     body: JSON.stringify({ start, end })
                 }).then(() => {
                     loadHistory();
-                    alert("Dates saved!"); <!-- Mensaje de alerta en inglés -->
-                }).catch(err => console.error("Error saving dates:", err)); <!-- Mensaje de error en inglés -->
+                    alert("Dates saved!");
+                }).catch(err => console.error("Error saving dates:", err));
             } else {
-                alert("Select a date range"); <!-- Mensaje de advertencia en inglés -->
+                alert("Select a date range");
             }
         }
 
@@ -121,7 +141,7 @@
             const diffTime = Math.abs(end - start);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
             document.getElementById("selected-dates").innerHTML = `Selected Dates: <span class='highlighted'>${start.toISOString().split('T')[0]}</span> - <span class='highlighted'>${end.toISOString().split('T')[0]}</span>`;
-            document.getElementById("days-count").innerText = `Number of days selected: ${diffDays}`; <!-- Contador de días en inglés -->
+            document.getElementById("days-count").innerText = `Number of days selected: ${diffDays}`;
         }
 
         function loadHistory() {
@@ -135,12 +155,12 @@
                         row.innerHTML = `
                             <td>${entry.start}</td>
                             <td>${entry.end}</td>
-                            <td>${entry.timestamp}</td> <!-- Mostrar la fecha y hora de la reserva -->
+                            <td>${entry.timestamp}</td>
                         `;
                         tableBody.appendChild(row);
                     });
                 })
-                .catch(err => console.error("Error loading history:", err)); <!-- Mensaje de error en inglés -->
+                .catch(err => console.error("Error loading history:", err));
         }
     </script>
 </body>
