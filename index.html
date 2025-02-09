@@ -15,80 +15,80 @@
             background-color: #f4f4f4;
             margin: 0;
         }
+
         .container {
             display: flex;
             flex-direction: column;
-            align-items: center;
             gap: 20px;
             padding: 20px;
             width: 100%;
-            max-width: 600px; /* Ajuste para centrar mejor */
+            max-width: 500px;
+            text-align: center;
         }
+
         .calendar, .history {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 100%;
         }
+
         .selected-dates, .highlighted {
             margin-top: 10px;
             font-weight: bold;
         }
+
         .history {
             max-height: 300px;
             overflow-y: auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
         }
 
-        /* Botón centrado y más grande */
-        .reserve-btn {
-            background-color: #00aaff;
+        /* Botón Reserve */
+        .reserve-button {
+            background-color: #00AEEF;
             color: white;
             font-size: 18px;
-            padding: 12px 24px;
+            padding: 15px;
+            width: 100%;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
             cursor: pointer;
-            display: block;
-            margin: 20px auto 0;
+            margin-top: 15px;
         }
 
-        .reserve-btn:hover {
-            background-color: #0088cc;
+        .reserve-button:hover {
+            background-color: #008ECC;
         }
 
-        /* Estilo responsivo */
+        /* Responsividad */
         @media only screen and (max-width: 768px) {
             .container {
                 padding: 10px;
             }
-            .calendar, .history {
-                width: 100%;
-            }
+
             table {
                 font-size: 12px;
             }
+
             th, td {
                 padding: 5px;
             }
+
             .selected-dates {
                 font-size: 14px;
             }
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
         }
     </style>
 </head>
@@ -97,7 +97,7 @@
         <div class="calendar">
             <h2>Select a Date Range</h2>
             <div id="inline-calendar"></div>
-            <button class="reserve-btn" onclick="saveDates()">RESERVE</button>
+            <button class="reserve-button" onclick="saveDates()">RESERVE</button>
             <div class="selected-dates" id="selected-dates"></div>
             <div class="selected-dates" id="days-count"></div>
         </div>
@@ -138,8 +138,8 @@
 
         function saveDates() {
             if (selectedRange.length === 2) {
-                const start = selectedRange[0].toLocaleDateString('en-CA'); // Corregido para evitar días anteriores
-                const end = selectedRange[1].toLocaleDateString('en-CA');
+                const start = selectedRange[0].toISOString().split('T')[0]; // Fecha en formato correcto
+                const end = selectedRange[1].toISOString().split('T')[0];
 
                 fetch(sheetUrl, {
                     method: "POST",
@@ -158,7 +158,7 @@
         function displaySelectedDates(start, end) {
             const diffTime = Math.abs(end - start);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            document.getElementById("selected-dates").innerHTML = `Selected Dates: <span class='highlighted'>${start.toLocaleDateString('en-CA')}</span> - <span class='highlighted'>${end.toLocaleDateString('en-CA')}</span>`;
+            document.getElementById("selected-dates").innerHTML = `Selected Dates: <span class='highlighted'>${start.toISOString().split('T')[0]}</span> - <span class='highlighted'>${end.toISOString().split('T')[0]}</span>`;
             document.getElementById("days-count").innerText = `Number of days selected: ${diffDays}`;
         }
 
