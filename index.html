@@ -17,11 +17,11 @@
         }
         .container {
             display: flex;
-            flex-direction: column; /* Cambiado para que los elementos se apilen en pantallas pequeñas */
+            flex-direction: column; /* Cambiado para que los elementos se apilen verticalmente */
             gap: 20px;
             padding: 20px;
             width: 100%;
-            max-width: 1200px;
+            max-width: 800px; /* Limitar el ancho para que no se vea demasiado ancho en pantallas grandes */
         }
         .calendar, .history {
             background: white;
@@ -51,7 +51,6 @@
         /* Estilo responsivo */
         @media only screen and (max-width: 768px) {
             .container {
-                flex-direction: column;
                 padding: 10px;
             }
             .calendar, .history {
