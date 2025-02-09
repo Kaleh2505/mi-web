@@ -17,11 +17,11 @@
         }
         .container {
             display: flex;
-            flex-direction: column;
+            flex-direction: column; 
             gap: 20px;
             padding: 20px;
             width: 100%;
-            max-width: 800px;
+            max-width: 800px; 
         }
         .calendar, .history {
             background: white;
@@ -29,7 +29,7 @@
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 100%;
+            position: relative; /* Para posicionar el botón */
         }
         .selected-dates, .highlighted {
             margin-top: 10px;
@@ -49,6 +49,23 @@
             text-align: center;
         }
 
+        /* Estilo del botón */
+        .reserve-btn {
+            background-color: #00aaff;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+        .reserve-btn:hover {
+            background-color: #0088cc;
+        }
+
         /* Estilo responsivo */
         @media only screen and (max-width: 768px) {
             .container {
@@ -56,7 +73,6 @@
             }
             .calendar, .history {
                 width: 100%;
-                max-width: 100%;  /* Añadido para asegurar que el calendario se ajuste */
             }
             table {
                 font-size: 12px;
@@ -67,9 +83,10 @@
             .selected-dates {
                 font-size: 14px;
             }
-            #inline-calendar {
-                width: 100%; /* El calendario tomará todo el ancho disponible */
-                max-width: 100%;
+            .reserve-btn {
+                position: static;
+                margin-top: 10px;
+                width: 100%;
             }
         }
 
@@ -84,7 +101,7 @@
         <div class="calendar">
             <h2>Select a Date Range</h2>
             <div id="inline-calendar"></div>
-            <button onclick="saveDates()">Save</button>
+            <button class="reserve-btn" onclick="saveDates()">RESERVE</button>
             <div class="selected-dates" id="selected-dates"></div>
             <div class="selected-dates" id="days-count"></div>
         </div>
@@ -135,7 +152,7 @@
                     body: JSON.stringify({ start, end })
                 }).then(() => {
                     loadHistory();
-                    alert("Dates saved!");
+                    alert("Your reservation has been recorded");
                 }).catch(err => console.error("Error saving dates:", err));
             } else {
                 alert("Select a date range");
