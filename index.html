@@ -15,79 +15,73 @@
             background-color: #f4f4f4;
             margin: 0;
         }
-
         .container {
             display: flex;
             flex-direction: column;
+            align-items: center; /* Centra el contenido */
             gap: 20px;
             padding: 20px;
             width: 100%;
-            max-width: 500px;
-            text-align: center;
+            max-width: 800px;
         }
-
         .calendar, .history {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            width: 100%;
         }
-
         .selected-dates, .highlighted {
             margin-top: 10px;
             font-weight: bold;
         }
-
         .history {
             max-height: 300px;
             overflow-y: auto;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
         }
-
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
         }
-
-        /* Botón Reserve */
-        .reserve-button {
-            background-color: #00AEEF;
+        /* Botón RESERVE */
+        .reserve-btn {
+            background-color: #00aaff;
             color: white;
             font-size: 18px;
-            padding: 15px;
-            width: 100%;
+            padding: 12px 24px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            width: 100%;
+            max-width: 300px;
             margin-top: 15px;
         }
-
-        .reserve-button:hover {
-            background-color: #008ECC;
+        .reserve-btn:hover {
+            background-color: #0088cc;
         }
-
-        /* Responsividad */
+        /* Responsivo */
         @media only screen and (max-width: 768px) {
             .container {
                 padding: 10px;
             }
-
             table {
                 font-size: 12px;
             }
-
             th, td {
                 padding: 5px;
             }
-
             .selected-dates {
                 font-size: 14px;
+            }
+            .reserve-btn {
+                font-size: 16px;
+                padding: 10px;
             }
         }
     </style>
@@ -97,7 +91,7 @@
         <div class="calendar">
             <h2>Select a Date Range</h2>
             <div id="inline-calendar"></div>
-            <button class="reserve-button" onclick="saveDates()">RESERVE</button>
+            <button class="reserve-btn" onclick="saveDates()">RESERVE</button>
             <div class="selected-dates" id="selected-dates"></div>
             <div class="selected-dates" id="days-count"></div>
         </div>
@@ -136,10 +130,16 @@
             loadHistory();
         });
 
+        function formatDateLocal(date) {
+            return date.getFullYear() + "-" + 
+                   String(date.getMonth() + 1).padStart(2, '0') + "-" + 
+                   String(date.getDate()).padStart(2, '0');
+        }
+
         function saveDates() {
             if (selectedRange.length === 2) {
-                const start = selectedRange[0].toISOString().split('T')[0]; // Fecha en formato correcto
-                const end = selectedRange[1].toISOString().split('T')[0];
+                const start = formatDateLocal(selectedRange[0]); // Corrección de la fecha
+                const end = formatDateLocal(selectedRange[1]);
 
                 fetch(sheetUrl, {
                     method: "POST",
@@ -158,8 +158,11 @@
         function displaySelectedDates(start, end) {
             const diffTime = Math.abs(end - start);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            document.getElementById("selected-dates").innerHTML = `Selected Dates: <span class='highlighted'>${start.toISOString().split('T')[0]}</span> - <span class='highlighted'>${end.toISOString().split('T')[0]}</span>`;
-            document.getElementById("days-count").innerText = `Number of days selected: ${diffDays}`;
+            document.getElementById("selected-dates").innerHTML = 
+                `Selected Dates: <span class='highlighted'>${formatDateLocal(start)}</span> - 
+                 <span class='highlighted'>${formatDateLocal(end)}</span>`;
+            document.getElementById("days-count").innerText = 
+                `Number of days selected: ${diffDays}`;
         }
 
         function loadHistory() {
