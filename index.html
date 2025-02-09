@@ -122,6 +122,7 @@
                         <th>End Date</th>
                         <th>Reservation Date & Time</th>
                         <th>Days Reserved</th> <!-- Nueva columna para los días -->
+                        <th>Additional Data</th> <!-- Nueva columna para datos adicionales -->
                     </tr>
                 </thead>
                 <tbody id="history-table"></tbody>
@@ -132,7 +133,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         let selectedRange = [];
-        const sheetUrl = "https://script.google.com/macros/s/AKfycbzKkJhQCc4-NG-Mq8T453UGfnajaqp5d6knhYf3Old2iDskTHgZ2xYohINl-A4u-ale/exec"; 
+        const sheetUrl = "https://script.google.com/macros/s/AKfycbzlzYjde5qkfuP3Nfg6eQ5CQJrNlkZS7TaemdGa4fBwUbq14y3-1BtlkpPEMwQNTiYY/exec"; 
 
         document.addEventListener("DOMContentLoaded", function () {
             flatpickr("#inline-calendar", {
@@ -203,6 +204,7 @@
                             <td>${entry.end}</td>
                             <td>${entry.timestamp}</td>
                             <td>${entry.days}</td> <!-- Añadimos el número de días -->
+                            <td>${entry.additionalData}</td> <!-- Nueva columna -->
                         `;
                         tableBody.appendChild(row);
                     });
